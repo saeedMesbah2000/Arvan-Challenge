@@ -1,0 +1,24 @@
+#toast {
+  animation-name: example;
+  animation-duration: 5s;
+  position: "fixed";
+  width: "200px";
+  z-index: "99";
+  background-color: #e2eed8;
+  color: #5cb85c;
+}
+
+@keyframes example {
+  0% {
+    right: -200px;
+    top: 60px;
+  }
+  50% {
+    right: 200px;
+    top: 60px;
+  }
+  100% {
+    right: -200px;
+    top: 60px;
+  }
+}
