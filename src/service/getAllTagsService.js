@@ -3,15 +3,18 @@ import apiPath from "./apiPath";
 
 const getAllTagsApi = async (user) => {
   try {
-    const response = await axios.get(apiPath.arvanCloud + "/tags", {
+    const url = `${apiPath.arvanCloud}/tags`;
+    const headers = {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
-      Authorization: "Token " + user.token,
-    });
+    };
+
+    const response = await axios.get(url, { headers });
 
     return response.data;
   } catch (error) {
-    alert(JSON.stringify(error.message));
+    console.error(error);
+    throw error;
   }
 };
 

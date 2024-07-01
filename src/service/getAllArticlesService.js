@@ -1,24 +1,21 @@
 import axios from "axios";
 import apiPath from "./apiPath";
 
-let config = {
-  headers: {
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-  },
-};
-
 const getAllArticlesApi = async (user) => {
   try {
-    const response = await axios.get(apiPath.arvanCloud + "/articles", {
+    const url = `${apiPath.arvanCloud}/articles`;
+    const headers = {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
-      Authorization: "Token " + user.token,
-    });
+      Authorization: `Token ${user.token}`,
+    };
+
+    const response = await axios.get(url, { headers });
 
     return response.data;
   } catch (error) {
-    alert(JSON.stringify(error.message));
+    console.error(error);
+    throw error;
   }
 };
 

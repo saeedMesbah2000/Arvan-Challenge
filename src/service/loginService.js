@@ -12,10 +12,11 @@ let config = {
 const loginApi = async (userObject) => {
   try {
     // debugger;
-    // const response = await axios.post(apiPath.arvanCloud + "/users/login", {
-    //   headers: config,
-    //   data: userObject,
-    // });
+    // const response = await axios.post(
+    //   apiPath.arvanCloud + "/users/login",
+    //   userObject,
+    //   config
+    // );
     // debugger;
     // return response;
 
