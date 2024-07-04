@@ -5,12 +5,14 @@ import getAllArticlesApi from "../service/getAllArticlesService";
 import Loading from "../share-component/Loading";
 import calculateFirstWords from "../helperFunctions/giveFirstAoumntWords";
 import deleteArticleApi from "../service/deleteArticleService";
+import Notification from "../share-component/Notification";
 
 const AllArticles = () => {
   const location = useLocation();
   const [user, setUser] = useState(location.state);
   const [selectedArticleSlugToDelete, setSelectedArticleSlugToDelete] =
     useState("");
+  const [toastMessages, setToastMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
 
@@ -21,15 +23,32 @@ const AllArticles = () => {
     });
   }, []);
 
-  const deleteArticle = () => {
-    deleteArticleApi(selectedArticleSlugToDelete, user.token);
-
-    setRows((preState) => {
+  const showMessage = (inputMessage) => {
+    setToastMessages((preState) => {
       const temp = [...preState];
-      return temp.filter(
-        (article, index) => article.slug !== selectedArticleSlugToDelete
-      );
+      debugger;
+      temp.push({
+        message: inputMessage,
+        id: temp.length + 1,
+      });
+      return temp;
     });
+  };
+
+  const deleteArticle = () => {
+    try {
+      // deleteArticleApi(selectedArticleSlugToDelete, user.token);
+
+      setRows((preState) => {
+        const temp = [...preState];
+        return temp.filter(
+          (article, index) => article.slug !== selectedArticleSlugToDelete
+        );
+      });
+      showMessage("Article deleted successfuly");
+    } catch (error) {
+      showMessage(error.message, true);
+    }
   };
 
   return (
@@ -40,6 +59,11 @@ const AllArticles = () => {
 
       <PopUp onClickFunction={deleteArticle} />
 
+      <Notification
+        hasError={false}
+        listOfMessages={toastMessages}
+        setListOfMessages={setToastMessages}
+      />
       <table className="table table-sm">
         <thead>
           <tr style={{ backgroundColor: "red" }}>
