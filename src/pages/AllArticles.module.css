@@ -1,0 +1,55 @@
+.allArticles_container {
+  width: 100%;
+  padding: 10px 24px;
+}
+
+.allArticles_header {
+  margin: 0px;
+  font-size: 40px;
+}
+
+.allArticles_table_header {
+  background-color: #eceeef;
+}
+
+.allArticles_table_first_cell {
+  padding-left: 10px;
+}
+
+.allArticles_table_title_expert_cell {
+  padding: 5px;
+  font-size: 15px;
+}
+
+.allArticles_table_cell {
+  padding: 5px;
+}
+
+.allArticles_table_action_cell_container {
+  display: flex;
+  justify-content: space-between;
+  width: 130px;
+}
+
+.allArticles_table_action_cell_dropDown_container {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.allArticles_table_action_cell_dropDown_item {
+  text-decoration: none;
+}
+
+.allArticles_loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 230px);
+  width: 100vw;
+}
+
+.allArticles_pageInation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

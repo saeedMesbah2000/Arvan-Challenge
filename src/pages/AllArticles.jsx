@@ -6,6 +6,7 @@ import Loading from "../share-component/Loading";
 import calculateFirstWords from "../helperFunctions/giveFirstAoumntWords";
 import deleteArticleApi from "../service/deleteArticleService";
 import Notification from "../share-component/Notification";
+import styles from "./AllArticles.module.css";
 
 const AllArticles = () => {
   const location = useLocation();
@@ -52,10 +53,8 @@ const AllArticles = () => {
   };
 
   return (
-    <div className="w-100" style={{ padding: "10px 24px" }}>
-      <p className="m-0" style={{ fontSize: "40px" }}>
-        All Posts
-      </p>
+    <div className={styles.allArticles_container}>
+      <p className={styles.allArticles_header}>All Posts</p>
 
       <PopUp onClickFunction={deleteArticle} />
 
@@ -66,23 +65,23 @@ const AllArticles = () => {
       />
       <table className="table table-sm">
         <thead>
-          <tr style={{ backgroundColor: "red" }}>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+          <tr>
+            <th className={styles.allArticles_table_header} scope="col">
               #
             </th>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+            <th className={styles.allArticles_table_header} scope="col">
               Title
             </th>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+            <th className={styles.allArticles_table_header} scope="col">
               Author
             </th>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+            <th className={styles.allArticles_table_header} scope="col">
               Tags
             </th>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+            <th className={styles.allArticles_table_header} scope="col">
               Expert
             </th>
-            <th style={{ backgroundColor: "#eceeef" }} scope="col">
+            <th className={styles.allArticles_table_header} scope="col">
               Created
             </th>
           </tr>
@@ -93,34 +92,42 @@ const AllArticles = () => {
             {rows.map((row, index) => {
               return (
                 <tr key={index}>
-                  <th scope="row" style={{ paddingLeft: "10px" }}>
+                  <th
+                    scope="row"
+                    className={styles.allArticles_table_first_cell}
+                  >
                     {index + 1}
                   </th>
-                  <td style={{ padding: "5px", fontSize: "15px" }}>
+
+                  <td className={styles.allArticles_table_title_expert_cell}>
                     {calculateFirstWords(10, row.title)}
                   </td>
-                  <td style={{ padding: "5px" }}>{row.author.username}</td>
-                  <td style={{ padding: "5px" }}>
+
+                  <td className={styles.allArticles_table_cell}>
+                    {row.author.username}
+                  </td>
+
+                  <td className={styles.allArticles_table_cell}>
                     {row.tagList.toString().replace(",", " ")}
                   </td>
-                  <td style={{ padding: "5px", fontSize: "15px" }}>
+
+                  <td className={styles.allArticles_table_title_expert_cell}>
                     {calculateFirstWords(20, row.body)}
                   </td>
+
                   <td>
                     <div
-                      className="d-flex flex-row justify-content-between"
-                      style={{ width: "130px" }}
+                      className={styles.allArticles_table_action_cell_container}
                     >
-                      <p className="">{row.createdAt.slice(0, 10)}</p>
+                      <p>{row.createdAt.slice(0, 10)}</p>
 
                       <div className="dropdown show">
                         <button
-                          className="btn btn-sm dropdown-toggle"
+                          className={`btn btn-sm dropdown-toggle ${styles.allArticles_table_action_cell_dropDown_container}`}
                           type="button"
                           id="dropdownMenuButton"
                           data-toggle="dropdown"
                           aria-expanded="false"
-                          style={{ backgroundColor: "#5bc0de", color: "white" }}
                         >
                           ...
                         </button>
@@ -130,10 +137,9 @@ const AllArticles = () => {
                           aria-labelledby="dropdownMenuLink"
                         >
                           <NavLink
-                            className="dropdown-item"
+                            className={`dropdown-item ${styles.allArticles_table_action_cell_dropDown_item}`}
                             to={`/articles/edit/${row.slug}`}
                             state={user}
-                            style={{ textDecoration: "none" }}
                           >
                             Edit
                           </NavLink>
@@ -165,20 +171,12 @@ const AllArticles = () => {
       </table>
 
       {isLoading && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "calc(100vh - 230px)",
-            width: "100vh",
-          }}
-        >
+        <div className={styles.allArticles_loading}>
           <Loading />
         </div>
       )}
 
-      <div className="d-flex justify-content-center align-items-center">
+      <div className={styles.allArticles_pageInation}>
         <nav aria-label="Page navigation example">
           <ul className="pagination">
             <li className="page-item">
