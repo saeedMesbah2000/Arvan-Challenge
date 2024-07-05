@@ -1,91 +1,206 @@
 import { NavLink } from "react-router-dom";
+import styles from "./Register.module.css";
+import useInput from "../hooks/useInput";
+import registerApi from "../service/registerService";
+import { useNavigate } from "react-router-dom";
+import Notification from "../share-component/Notification";
+import { useState } from "react";
+
+const userNameValidation = (value) => {
+  return value.trim() !== "";
+};
+
+const emailValidation = (value) => {
+  return value.includes("@");
+};
+
+const passwordValidation = (value) => {
+  return value.trim() !== "";
+};
 
 const Register = () => {
-  return (
-    <div
-      className="d-flex flex-row justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <div
-        style={{
-          width: "450px",
-          height: "528px",
-          backgroundColor: "#DDDDDD",
-          borderRadius: "4px",
-          padding: "0px 20px",
-        }}
-      >
-        <form>
-          <p
-            className="m-0 text-center"
-            style={{
-              fontSize: "47px",
-              color: "#777777",
-              paddingTop: "35px",
-              paddingBottom: "35px",
-            }}
-          >
-            Register
-          </p>
+  const navigate = useNavigate();
+  const [toastMessages, setToastMessages] = useState([]);
 
-          <div class="form-group" style={{ marginBottom: "25px" }}>
-            <label for="exampleInputEmail1" style={{ marginBottom: "8px" }}>
+  const showMessage = (inputMessage) => {
+    setToastMessages((preState) => {
+      const temp = [...preState];
+      debugger;
+      temp.push({
+        message: inputMessage,
+        id: temp.length + 1,
+      });
+      return temp;
+    });
+  };
+
+  const {
+    value: userNameValue,
+    inputIsValid: userNameIsValid,
+    hasError: userNameError,
+    onBlurHandler: userNameOnBlurHandler,
+    onChangeHandler: userNameOnChangeHandler,
+    onResetHandler: userNameOnResetHandler,
+  } = useInput(userNameValidation);
+
+  const {
+    value: emailValue,
+    inputIsValid: emailIsValid,
+    hasError: emailError,
+    onBlurHandler: emailOnBlurHandler,
+    onChangeHandler: emailOnChangeHandler,
+    onResetHandler: emailOnResetHandler,
+  } = useInput(emailValidation);
+
+  const {
+    value: passwordValue,
+    inputIsValid: passwordIsValid,
+    hasError: passwordError,
+    onBlurHandler: passwordOnBlurHandler,
+    onChangeHandler: passwordOnChangeHandler,
+    onResetHandler: passwordOnResetHandler,
+  } = useInput(passwordValidation);
+
+  const formIsValid = userNameIsValid && passwordIsValid && emailIsValid;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    console.log(userNameValue);
+    console.log(passwordValue);
+    console.log(emailValue);
+
+    const response = await registerApi({
+      user: {
+        email: emailValue,
+        password: passwordValue,
+        username: userNameValue,
+      },
+    });
+
+    if (response.status) {
+      navigate("/articles", {
+        state: {
+          loggedIn: true,
+          userName: response.data.user.username,
+          token: response.data.user.token,
+        },
+      });
+    } else {
+      alert(JSON.stringify(response.data));
+      for (const key in response.data) {
+        alert(JSON.stringify(response.data[key]));
+        showMessage(key + " " + response.data[key]);
+      }
+    }
+
+    userNameOnResetHandler();
+    emailOnResetHandler();
+    passwordOnResetHandler();
+  };
+
+  return (
+    <div className={styles.register}>
+      <Notification
+        hasError={true}
+        listOfMessages={toastMessages}
+        setListOfMessages={setToastMessages}
+      />
+
+      <div className={styles.register_container}>
+        <form onSubmit={handleSubmit}>
+          <p className={styles.register_container_form_header}>Register</p>
+
+          <div class={`form-group ${styles.register_container_form_container}`}>
+            <label
+              for="exampleInputEmail1"
+              className={styles.register_container_form_label}
+            >
               User
             </label>
 
             <input
               type="text"
-              className="form-control rounded-lg"
+              className={`form-control ${styles.register_container_form_input}`}
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              style={{ borderRadius: "4px" }}
+              value={userNameValue}
+              onChange={userNameOnChangeHandler}
+              onBlur={userNameOnBlurHandler}
             />
+
+            {userNameError && (
+              <div className={styles.register_container_form_error}>
+                wrong user name
+              </div>
+            )}
           </div>
 
-          <div class="form-group" style={{ marginBottom: "25px" }}>
-            <label for="exampleInputEmail1" style={{ marginBottom: "8px" }}>
+          <div class={`form-group ${styles.register_container_form_container}`}>
+            <label
+              for="exampleInputEmail1"
+              className={styles.register_container_form_label}
+            >
               Email
             </label>
 
             <input
               type="email"
-              className="form-control rounded-lg"
+              className={`form-control ${styles.register_container_form_input}`}
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              style={{ borderRadius: "4px" }}
+              value={emailValue}
+              onChange={emailOnChangeHandler}
+              onBlur={emailOnBlurHandler}
             />
+
+            {emailError && (
+              <div className={styles.register_container_form_error}>
+                wrong Email
+              </div>
+            )}
           </div>
 
-          <div className="form-group" style={{ marginBottom: "45px" }}>
-            <label for="exampleInputPassword1" style={{ marginBottom: "8px" }}>
+          <div
+            className={`form-group ${styles.register_container_form_container}`}
+          >
+            <label
+              for="exampleInputPassword1"
+              className={styles.register_container_form_label}
+            >
               Password
             </label>
 
             <input
               type="password"
-              className="form-control"
+              className={`form-control ${styles.register_container_form_input}`}
               id="exampleInputPassword1"
-              style={{ borderRadius: "4px" }}
+              onChange={passwordOnChangeHandler}
+              onBlur={passwordOnBlurHandler}
+              value={passwordValue}
             />
+
+            {passwordError && (
+              <div className={styles.register_container_form_error}>
+                inValid password
+              </div>
+            )}
           </div>
 
           <button
-            // type="submit"
-            className="btn btn-primary w-100"
-            style={{ borderRadius: "4px" }}
+            type="submit"
+            className={`btn ${styles.register_container_form_button}`}
+            disabled={!formIsValid}
           >
             Register
           </button>
         </form>
 
-        <div
-          className="d-flex flex-row"
-          style={{ marginTop: "15px", gap: "11px" }}
-        >
+        <div className={styles.register_container_registered}>
           <p>Already registerd ?</p>
           <NavLink
             to="/login"
-            style={{ textDecoration: "none", fontSize: "18px" }}
+            className={styles.register_container_registered_link}
           >
             Login
           </NavLink>
