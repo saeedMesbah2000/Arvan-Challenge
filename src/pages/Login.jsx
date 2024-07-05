@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import loginApi from "../service/loginService";
+import styles from "./Login.module.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -56,110 +57,61 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="d-flex flex-row justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <div
-        style={{
-          width: "450px",
-          height: "423px",
-          backgroundColor: "#DDDDDD",
-          borderRadius: "4px",
-          padding: "0px 27px",
-        }}
-      >
+    <div className={styles.login}>
+      <div className={styles.login_container}>
         <form onSubmit={handleSubmit}>
-          <p
-            className="m-0 text-center"
-            style={{ fontSize: "47px", color: "#777777", paddingTop: "37px" }}
-          >
-            LOGIN
-          </p>
+          <p className={styles.login_header}>LOGIN</p>
 
-          <div
-            className="form-group"
-            style={{ marginBottom: "25px", position: "relative" }}
-          >
-            <label for="exampleInputEmail1" style={{ marginBottom: "9px" }}>
+          <div className={styles.login_form_container}>
+            <label for="exampleInputEmail1" className={styles.login_form_label}>
               Email
             </label>
 
             <input
               type="email"
-              className="form-control rounded-lg"
+              className={`form-control ${styles.login_form_input}`}
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              style={{ borderRadius: "4px" }}
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
             />
             {errors.email && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "-22px",
-                  left: "5px",
-                  backgroundColor: "#cb2e25",
-                }}
-              >
-                {errors.email}
-              </div>
+              <div className={styles.login_error}>{errors.email}</div>
             )}
           </div>
 
-          <div
-            className="form-group"
-            style={{ marginBottom: "56px", position: "relative" }}
-          >
-            <label for="exampleInputPassword1" style={{ marginBottom: "9px" }}>
+          <div className={`form-group ${styles.login_form_container}`}>
+            <label
+              for="exampleInputPassword1"
+              className={styles.login_form_label}
+            >
               Password
             </label>
 
             <input
               type="password"
-              className="form-control"
+              className={`form-control ${styles.login_form_input}`}
               id="exampleInputPassword1"
-              style={{ borderRadius: "4px" }}
               value={password}
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
             />
             {errors.password && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "-22px",
-                  left: "5px",
-                  backgroundColor: "#cb2e25",
-                }}
-              >
-                {errors.password}
-              </div>
+              <div className={styles.login_error}>{errors.password}</div>
             )}
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary w-100"
-            style={{ borderRadius: "4px" }}
-          >
+          <button type="submit" className={`btn ${styles.lgin_form_button}`}>
             Login
           </button>
         </form>
 
-        <div
-          className="d-flex flex-row"
-          style={{ marginTop: "15px", gap: "11px" }}
-        >
+        <div className={styles.login_account_container}>
           <p>Don't have account ?</p>
-          <NavLink
-            to="/Register"
-            style={{ textDecoration: "none", fontSize: "18px" }}
-          >
+          <NavLink to="/Register" className={styles.login_account_link}>
             Register Now
           </NavLink>
         </div>
