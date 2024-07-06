@@ -16,7 +16,7 @@ const registerApi = async (userObject) => {
       userObject,
       { headers: config }
     );
-    debugger;
+
     return { data: response.data, status: true };
   } catch (error) {
     console.log(error.message);

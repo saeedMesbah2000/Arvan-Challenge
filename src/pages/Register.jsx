@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import styles from "./Register.module.css";
-import useInput from "../hooks/useInput";
 import registerApi from "../service/registerService";
 import { useNavigate } from "react-router-dom";
 import Notification from "../share-component/Notification";
 import { useState } from "react";
+import { useInput, useMessage } from "../hooks";
 
 const userNameValidation = (value) => {
   return value.trim() !== "";
@@ -20,19 +20,7 @@ const passwordValidation = (value) => {
 
 const Register = () => {
   const navigate = useNavigate();
-  const [toastMessages, setToastMessages] = useState([]);
-
-  const showMessage = (inputMessage) => {
-    setToastMessages((preState) => {
-      const temp = [...preState];
-      debugger;
-      temp.push({
-        message: inputMessage,
-        id: temp.length + 1,
-      });
-      return temp;
-    });
-  };
+  const { showMessage, toastMessages, setToastMessages } = useMessage();
 
   const {
     value: userNameValue,
@@ -87,9 +75,7 @@ const Register = () => {
         },
       });
     } else {
-      alert(JSON.stringify(response.data));
       for (const key in response.data) {
-        alert(JSON.stringify(response.data[key]));
         showMessage(key + " " + response.data[key]);
       }
     }

@@ -3,61 +3,71 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import loginApi from "../service/loginService";
 import styles from "./Login.module.css";
+import { useInput, useMessage } from "../hooks";
+import Notification from "../share-component/Notification";
+
+const emailValidation = (value) => {
+  return value.includes("@");
+};
+
+const passwordValidation = (value) => {
+  return value.trim() !== "";
+};
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({
-    password: "",
-    email: "",
-  });
   const navigate = useNavigate();
+  const { showMessage, toastMessages, setToastMessages } = useMessage();
+
+  const {
+    value: emailValue,
+    inputIsValid: emailIsValid,
+    hasError: emailError,
+    onBlurHandler: emailOnBlurHandler,
+    onChangeHandler: emailOnChangeHandler,
+    onResetHandler: emailOnResetHandler,
+  } = useInput(emailValidation);
+
+  const {
+    value: passwordValue,
+    inputIsValid: passwordIsValid,
+    hasError: passwordError,
+    onBlurHandler: passwordOnBlurHandler,
+    onChangeHandler: passwordOnChangeHandler,
+    onResetHandler: passwordOnResetHandler,
+  } = useInput(passwordValidation);
+
+  const formIsValid = passwordIsValid && emailIsValid;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!email.includes("@")) {
-      setErrors({ ...errors, email: "Email is not correct" });
-      return;
-    }
-
-    if (email.length === 0) {
-      setErrors({ ...errors, email: "Enter Email" });
-      return;
-    }
-
-    setErrors({ ...errors, email: "" });
-
-    if (password.length < 2) {
-      setErrors({
-        ...errors,
-        password: "Password must be atleast 2 characters",
-      });
-
-      return;
-    }
-    setErrors({
-      ...errors,
-      password: "",
-    });
-
     const response = await loginApi({
-      user: { email: email, password: password },
+      user: { email: emailValue, password: passwordValue },
     });
 
-    if (response) {
+    if (response.status) {
       navigate("/articles", {
         state: {
           loggedIn: true,
-          userName: response.user.username,
-          token: response.user.token,
+          userName: response.data.user.username,
+          token: response.data.user.token,
         },
       });
+    } else {
+      for (const key in response.data) {
+        showMessage(key + " " + response.data[key]);
+      }
     }
   };
 
   return (
     <div className={styles.login}>
+      <Notification
+        hasError={true}
+        listOfMessages={toastMessages}
+        setListOfMessages={setToastMessages}
+      />
+
       <div className={styles.login_container}>
         <form onSubmit={handleSubmit}>
           <p className={styles.login_header}>LOGIN</p>
@@ -72,13 +82,12 @@ const Login = () => {
               className={`form-control ${styles.login_form_input}`}
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
+              value={emailValue}
+              onChange={emailOnChangeHandler}
+              onBlur={emailOnBlurHandler}
             />
-            {errors.email && (
-              <div className={styles.login_error}>{errors.email}</div>
+            {emailError && (
+              <div className={styles.login_error}>Wront Input</div>
             )}
           </div>
 
@@ -94,17 +103,20 @@ const Login = () => {
               type="password"
               className={`form-control ${styles.login_form_input}`}
               id="exampleInputPassword1"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              value={passwordValue}
+              onChange={passwordOnChangeHandler}
+              onBlur={passwordOnBlurHandler}
             />
-            {errors.password && (
-              <div className={styles.login_error}>{errors.password}</div>
+            {passwordError && (
+              <div className={styles.login_error}>Required field</div>
             )}
           </div>
 
-          <button type="submit" className={`btn ${styles.lgin_form_button}`}>
+          <button
+            type="submit"
+            disabled={!formIsValid}
+            className={`btn ${styles.lgin_form_button}`}
+          >
             Login
           </button>
         </form>

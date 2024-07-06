@@ -11,28 +11,16 @@ let config = {
 
 const loginApi = async (userObject) => {
   try {
-    // debugger;
-    // const response = await axios.post(
-    //   apiPath.arvanCloud + "/users/login",
-    //   userObject,
-    //   { headers: config }
-    // );
-    // debugger;
-    // return response;
+    const response = await axios.post(
+      apiPath.arvanCloud + "/users/login",
+      userObject,
+      { headers: config }
+    );
 
-    return {
-      user: {
-        email: "saeedTest@gmail.com",
-        username: "testUser1",
-        bio: null,
-        image: "https://api.realworld.io/images/smiley-cyrus.jpeg",
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNzg1Mn0sImlhdCI6MTcxOTc3MTQwOCwiZXhwIjoxNzI0OTU1NDA4fQ.6CcgIkjsHgvQk7SKL7JCtx6BjGzbzupeEWzNLw70PVE",
-      },
-    };
+    return { data: response.data, status: true };
   } catch (error) {
-    alert(JSON.stringify(error.message));
-    return false;
+    console.log(error.message);
+    return { data: error.response.data.errors, status: false };
   }
 };
 
