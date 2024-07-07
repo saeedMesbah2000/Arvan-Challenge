@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import getAllTagsApi from "../service/getAllTagsService";
 import Loading from "../share-component/Loading";
+import { UserContext } from "../App";
 
 const EditArticle = () => {
+  const user = useContext(UserContext);
   const temp = useParams();
   const location = useLocation();
-  const [user, setUser] = useState(location.state);
+  const [editedRow, setEditedRow] = useState(location.state);
+  debugger;
   const [tags, setTags] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [newArticle, setNewArticle] = useState({

@@ -1,6 +1,6 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import PopUp from "../share-component/PopUp";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getAllArticlesApi from "../service/getAllArticlesService";
 import Loading from "../share-component/Loading";
 import calculateFirstWords from "../helperFunctions/giveFirstAoumntWords";
@@ -8,13 +8,12 @@ import deleteArticleApi from "../service/deleteArticleService";
 import Notification from "../share-component/Notification";
 import styles from "./AllArticles.module.css";
 import { useMessage } from "../hooks";
+import { UserContext } from "../App";
 
 const AllArticles = () => {
-  const location = useLocation();
-  const [user, setUser] = useState(location.state);
+  const user = useContext(UserContext);
   const [selectedArticleSlugToDelete, setSelectedArticleSlugToDelete] =
     useState("");
-
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const { showMessage, toastMessages, setToastMessages } = useMessage();
@@ -129,7 +128,7 @@ const AllArticles = () => {
                           <NavLink
                             className={`dropdown-item ${styles.allArticles_table_action_cell_dropDown_item}`}
                             to={`/articles/edit/${row.slug}`}
-                            state={user}
+                            state={row}
                           >
                             Edit
                           </NavLink>
