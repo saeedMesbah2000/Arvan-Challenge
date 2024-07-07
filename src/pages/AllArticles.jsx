@@ -22,7 +22,7 @@ const AllArticles = () => {
   useEffect(() => {
     getAllArticlesApi(user).then((response) => {
       setIsLoading(false);
-      setRows(response.articles);
+      setRows(response.data.articles);
     });
   }, []);
 

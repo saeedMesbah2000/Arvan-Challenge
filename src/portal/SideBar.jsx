@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../App";
 
-const SideBar = ({ user, children }) => {
+const SideBar = ({ children }) => {
+  const user = useContext(UserContext);
+
   return (
     <div className="d-flex flex-row">
       <div

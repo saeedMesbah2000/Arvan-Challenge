@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext, UserSetContext } from "../App";
 
-const Navbar = ({ user, setUser }) => {
+const Navbar = () => {
+  const user = useContext(UserContext);
+  const setUser = useContext(UserSetContext);
+
   return (
     <nav
       className="d-flex flex-row justify-content-between p-3 navbar navbar-expand-lg navbar-light text-light"

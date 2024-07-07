@@ -3,8 +3,11 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import SideBar from "./portal/SideBar";
 import { Outlet, useLocation } from "react-router";
-import { useState } from "react";
+import { createContext, useState } from "react";
 import { Navigate } from "react-router-dom";
+
+export const UserContext = createContext();
+export const UserSetContext = createContext();
 
 function App() {
   const location = useLocation();
@@ -13,12 +16,14 @@ function App() {
   return (
     <>
       {user?.loggedIn ? (
-        <div>
-          <Navbar user={user} setUser={setUser} />
-          <SideBar user={user}>
-            <Outlet />
-          </SideBar>
-        </div>
+        <UserContext.Provider value={user}>
+          <UserSetContext.Provider value={setUser}>
+            <Navbar />
+            <SideBar>
+              <Outlet />
+            </SideBar>
+          </UserSetContext.Provider>
+        </UserContext.Provider>
       ) : (
         <Navigate to={"/login"} />
       )}
