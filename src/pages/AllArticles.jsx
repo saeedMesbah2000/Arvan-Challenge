@@ -7,15 +7,17 @@ import calculateFirstWords from "../helperFunctions/giveFirstAoumntWords";
 import deleteArticleApi from "../service/deleteArticleService";
 import Notification from "../share-component/Notification";
 import styles from "./AllArticles.module.css";
+import { useMessage } from "../hooks";
 
 const AllArticles = () => {
   const location = useLocation();
   const [user, setUser] = useState(location.state);
   const [selectedArticleSlugToDelete, setSelectedArticleSlugToDelete] =
     useState("");
-  const [toastMessages, setToastMessages] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
+  const { showMessage, toastMessages, setToastMessages } = useMessage();
 
   useEffect(() => {
     getAllArticlesApi(user).then((response) => {
@@ -23,18 +25,6 @@ const AllArticles = () => {
       setRows(response.articles);
     });
   }, []);
-
-  const showMessage = (inputMessage) => {
-    setToastMessages((preState) => {
-      const temp = [...preState];
-      debugger;
-      temp.push({
-        message: inputMessage,
-        id: temp.length + 1,
-      });
-      return temp;
-    });
-  };
 
   const deleteArticle = () => {
     try {
