@@ -61,7 +61,9 @@ const EditArticle = () => {
 
   useEffect(() => {
     getAllTagsApi(user).then((response) => {
-      setTags(response.tags);
+      setTags((preState) => {
+        return [...new Set([...response.tags, ...selectedTags])];
+      });
       setIsLoading((preState) => {
         return { ...preState, tags: false };
       });
