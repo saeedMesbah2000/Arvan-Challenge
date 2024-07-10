@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import loginApi from "../service/loginService";
 import styles from "./Login.module.css";

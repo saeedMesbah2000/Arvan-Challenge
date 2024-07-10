@@ -1,42 +1,45 @@
-import React, { useContext } from "react";
+/*
+  this component is for side bar and it wraps the other components like AllArticles and ect.
+
+  argumetns : 
+
+  1- children : this components take other components and wraps its self around it and adding side bar to all other compoents
+
+*/
+
+import React from "react";
 import { NavLink } from "react-router-dom";
-import { UserContext } from "../App";
+import styles from "./SideBar.module.css";
 
 const SideBar = ({ children }) => {
-  const user = useContext(UserContext);
-
   return (
-    <div className="d-flex flex-row">
-      <div
-        className="d-flex flex-column p-3 gap-2"
-        style={{
-          minHeight: "100vh",
-          width: "200px",
-          backgroundColor: "#1c7cd5",
-          fontSize: "22px",
-          fontWeight: "45px",
-        }}
-      >
-        <p className="m-0 text-light">Post</p>
+    <div className={styles.sideBar}>
+      <div className={styles.sideBar_container}>
+        <p className={styles.sideBar_title}>Post</p>
 
         <NavLink
           to="/articles"
-          state={user}
           className={({ isActive, isPending }) => {
-            return `${isActive ? "" : ""} text-light px-3`;
+            return `${
+              isActive
+              // ? `${styles.sideBar_menu_item_active}`
+              // : `${styles.sideBar_menu_item_not_active}`
+            } text-light px-3 ${styles.sideBar_menu_item}`;
           }}
-          style={{ textDecoration: "none", fontSize: "18px" }}
+          // style={{ textDecoration: "none", fontSize: "18px" }}
         >
           All Articles
         </NavLink>
 
         <NavLink
           to="/articles/create"
-          state={user}
           className={({ isActive, isPending }) => {
-            return `${isActive ? "" : ""} text-light px-3`;
+            return `${
+              isActive
+              // ? `${styles.sideBar_menu_item_active}`
+              // : `${styles.sideBar_menu_item_not_active}`
+            } text-light px-3 ${styles.sideBar_menu_item}`;
           }}
-          style={{ textDecoration: "none", fontSize: "18px" }}
         >
           New Articles
         </NavLink>

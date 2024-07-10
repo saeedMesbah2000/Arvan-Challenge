@@ -1,3 +1,14 @@
+/*
+this is componenet is for popUp functionality and it is implemented with bootstrap
+
+input arguments: 
+
+1- onClickFunction : it is a funcion that given to the "Yes" button if the action is been decided to happen
+
+Note: the bootstrap will handle the close functionality in "No" button
+
+*/
+
 const PopUp = ({ onClickFunction }) => {
   return (
     <div
