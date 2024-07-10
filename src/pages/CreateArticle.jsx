@@ -1,30 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import getAllTagsApi from "../service/getAllTagsService";
 import Loading from "../share-component/Loading";
 import createArticlesApi from "../service/createArticleService";
+import { useInput } from "../hooks";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
+
+const titleValidation = (value) => {
+  return value.trim() !== "";
+};
+
+const descriptionValidation = (value) => {
+  return value.trim() !== "";
+};
+
+const bodyValidation = (value) => {
+  return value.trim() !== "";
+};
 
 const CreateArticle = () => {
-  const temp = useParams();
-  const location = useLocation();
-  const [user, setUser] = useState(location.state);
-  const [tags, setTags] = useState();
+  const navigate = useNavigate();
+  const user = useContext(UserContext);
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const [isLoading, setIsLoading] = useState({
     tags: true,
     submitButton: true,
   });
-  const [newArticle, setNewArticle] = useState({
-    title: "",
-    description: "",
-    body: "",
-    tagList: [],
-  });
-  const [errors, setErrors] = useState({
-    title: "",
-    description: "",
-    body: "",
-  });
+
+  const {
+    value: titleValue,
+    inputIsValid: titleIsValid,
+    hasError: titleError,
+    onBlurHandler: titleOnBlurHandler,
+    onChangeHandler: titleOnChangeHandler,
+    onResetHandler: titleOnResetHandler,
+  } = useInput(titleValidation);
+
+  const {
+    value: descriptionValue,
+    inputIsValid: descriptionIsValid,
+    hasError: descriptionError,
+    onBlurHandler: descriptionOnBlurHandler,
+    onChangeHandler: descriptionOnChangeHandler,
+    onResetHandler: descriptionOnResetHandler,
+  } = useInput(descriptionValidation);
+
+  const {
+    value: bodyValue,
+    inputIsValid: bodyIsValid,
+    hasError: bodyError,
+    onBlurHandler: bodyOnBlurHandler,
+    onChangeHandler: bodyOnChangeHandler,
+    onResetHandler: bodyOnResetHandler,
+  } = useInput(bodyValidation);
 
   useEffect(() => {
     getAllTagsApi(user).then((response) => {
@@ -35,43 +64,54 @@ const CreateArticle = () => {
     });
   }, []);
 
+  const formIsValid = titleIsValid && descriptionIsValid && bodyIsValid;
+
+  const tagsOnSelectHandler = (event) => {
+    if (event.target.checked) {
+      setSelectedTags((preState) => {
+        const temp = [...preState];
+        temp.push(event.target.value);
+
+        return temp;
+      });
+    } else {
+      setSelectedTags((preState) => {
+        const temp = [...preState];
+
+        return temp.filter((item) => item !== event.target.value);
+      });
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (newArticle.title.length === 0) {
-      setErrors({ ...errors, title: "Title must not be empty" });
-      setIsLoading({ ...isLoading, submitButton: true });
-      return;
+    const newArticle = {
+      article: {
+        title: titleValue,
+        description: descriptionValue,
+        body: bodyValue,
+        tagList: selectedTags,
+      },
+    };
+
+    const response = await createArticlesApi(user, newArticle);
+
+    if (response.status) {
+      debugger;
+      navigate("/articles");
+    } else {
+      for (const key in response.data) {
+        showMessage(key + " " + response.data[key]);
+      }
     }
-
-    setErrors({ ...errors, title: "" });
-
-    if (newArticle.description.length === 0) {
-      setErrors({ ...errors, description: "Description must not be empty" });
-      setIsLoading({ ...isLoading, submitButton: true });
-      return;
-    }
-
-    setErrors({ ...errors, description: "" });
-
-    if (newArticle.body.length === 0) {
-      setErrors({ ...errors, body: "Body must not be empty" });
-      setIsLoading({ ...isLoading, submitButton: true });
-      return;
-    }
-
-    setErrors({ ...errors, body: "" });
-
-    createArticlesApi(user, newArticle).then((response) => {
-      console.log(response);
-    });
     setIsLoading({ ...isLoading, submitButton: true });
   };
 
   return (
     <div className="w-100" style={{ padding: "10px 24px" }}>
       <p className="m-0" style={{ fontSize: "40px" }}>
-        {temp.slug ? "Edit Article" : "Create Article"}
+        Create Article
       </p>
 
       <div className="w-100 d-flex flex-row">
@@ -86,14 +126,12 @@ const CreateArticle = () => {
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 placeholder="Title"
-                onChange={(event) => {
-                  setNewArticle((preState) => {
-                    return { ...preState, title: event.target.value };
-                  });
-                }}
+                value={titleValue}
+                onChange={titleOnChangeHandler}
+                onBlur={titleOnBlurHandler}
               />
 
-              {errors.title && (
+              {titleError && (
                 <div
                   style={{
                     position: "absolute",
@@ -102,7 +140,7 @@ const CreateArticle = () => {
                     color: "#cb2e25",
                   }}
                 >
-                  {errors.title}
+                  Title shoud not be empty
                 </div>
               )}
             </div>
@@ -115,14 +153,12 @@ const CreateArticle = () => {
                 className="form-control"
                 id="exampleInputPassword1"
                 placeholder="Description"
-                onChange={(event) => {
-                  setNewArticle((preState) => {
-                    return { ...preState, description: event.target.value };
-                  });
-                }}
+                value={descriptionValue}
+                onChange={descriptionOnChangeHandler}
+                onBlur={descriptionOnBlurHandler}
               />
 
-              {errors.description && (
+              {descriptionError && (
                 <div
                   style={{
                     position: "absolute",
@@ -131,7 +167,7 @@ const CreateArticle = () => {
                     color: "#cb2e25",
                   }}
                 >
-                  {errors.description}
+                  Description is not valid
                 </div>
               )}
             </div>
@@ -143,14 +179,12 @@ const CreateArticle = () => {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 rows="8"
-                onChange={(event) => {
-                  setNewArticle((preState) => {
-                    return { ...preState, body: event.target.value };
-                  });
-                }}
+                value={bodyValue}
+                onChange={bodyOnChangeHandler}
+                onBlur={bodyOnBlurHandler}
               />
 
-              {errors.body && (
+              {bodyError && (
                 <div
                   style={{
                     position: "absolute",
@@ -159,7 +193,7 @@ const CreateArticle = () => {
                     color: "#cb2e25",
                   }}
                 >
-                  {errors.body}
+                  Body should not be empty
                 </div>
               )}
             </div>
@@ -167,6 +201,7 @@ const CreateArticle = () => {
             <button
               type="submit"
               className="btn btn-primary px-4"
+              disabled={!formIsValid}
               onClick={() => {
                 setIsLoading({ ...isLoading, submitButton: false });
               }}
@@ -186,7 +221,7 @@ const CreateArticle = () => {
           <div className="form-group">
             <label for="exampleInputEmail1">Tags</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
@@ -208,7 +243,6 @@ const CreateArticle = () => {
               </div>
             ) : (
               <>
-                {" "}
                 {tags.map((tag, index) => {
                   return (
                     <div className="form-check">
@@ -217,9 +251,7 @@ const CreateArticle = () => {
                         type="checkbox"
                         value={tag}
                         id="defaultCheck1"
-                        onChange={(event) => {
-                          console.log(event.target.value);
-                        }}
+                        onChange={tagsOnSelectHandler}
                       />
                       <label className="form-check-label" for="defaultCheck1">
                         {tag}

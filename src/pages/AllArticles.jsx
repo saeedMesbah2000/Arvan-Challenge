@@ -25,10 +25,10 @@ const AllArticles = () => {
     });
   }, []);
 
-  const deleteArticle = () => {
-    try {
-      // deleteArticleApi(selectedArticleSlugToDelete, user.token);
+  const deleteArticle = async () => {
+    const response = await deleteArticleApi(selectedArticleSlugToDelete, user);
 
+    if (response.status) {
       setRows((preState) => {
         const temp = [...preState];
         return temp.filter(
@@ -36,8 +36,10 @@ const AllArticles = () => {
         );
       });
       showMessage("Article deleted successfuly");
-    } catch (error) {
-      showMessage(error.message, true);
+    } else {
+      for (const key in response.data) {
+        showMessage(key + " " + response.data[key]);
+      }
     }
   };
 

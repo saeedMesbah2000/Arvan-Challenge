@@ -1,15 +1,17 @@
 import axios from "axios";
 import apiPath from "./apiPath";
 
-const deleteArticleApi = async (articleSlug, user) => {
+const editArticleApi = async (user, slug, articleBody) => {
   try {
-    const url = `${apiPath.arvanCloud}/articles/${articleSlug}`;
+    const url = `${apiPath.arvanCloud}/articles/${slug}`;
     const config = {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
       Authorization: `Token ${user.token}`,
     };
-    const response = await axios.delete(url, { headers: config });
+    debugger;
+    const response = await axios.put(url, articleBody, { headers: config });
+    debugger;
 
     return { data: response.data, status: true };
   } catch (error) {
@@ -18,4 +20,4 @@ const deleteArticleApi = async (articleSlug, user) => {
   }
 };
 
-export default deleteArticleApi;
+export default editArticleApi;
