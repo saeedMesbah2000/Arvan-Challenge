@@ -9,9 +9,8 @@ const editArticleApi = async (user, slug, articleBody) => {
       "X-Requested-With": "XMLHttpRequest",
       Authorization: `Token ${user.token}`,
     };
-    debugger;
+
     const response = await axios.put(url, articleBody, { headers: config });
-    debugger;
 
     return { data: response.data, status: true };
   } catch (error) {

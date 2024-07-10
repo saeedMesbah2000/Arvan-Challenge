@@ -9,9 +9,7 @@ const createArticlesApi = async (user, articleBody) => {
       "X-Requested-With": "XMLHttpRequest",
       Authorization: `Token ${user.token}`,
     };
-    debugger;
     const response = await axios.post(url, articleBody, { headers: config });
-    debugger;
 
     return { data: response.data, status: true };
   } catch (error) {

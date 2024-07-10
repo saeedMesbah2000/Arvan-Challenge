@@ -1,0 +1,51 @@
+.editArticle_container {
+  width: 100%;
+  padding: 10px 24px;
+}
+
+.editArticle_header {
+  margin: 0px;
+  font-size: 40px;
+}
+
+.editArticle_form_container {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+}
+
+.editArticle_form_all_inputs_container {
+  width: 100%;
+}
+
+.editArticle_form_input_container {
+  position: relative;
+}
+
+.editArticle_form_input_error {
+  position: absolute;
+  bottom: -22px;
+  left: 5px;
+  color: #cb2e25;
+}
+
+.editArticle_form_input_submit_button {
+  background-color: #1c7cd5;
+  color: white;
+  padding: 4px 16px;
+}
+
+.editArticle_form_input_submit_button_loading {
+  padding: 2px 16px;
+}
+
+.editArticle_form_tags_container {
+  width: 250px;
+}
+
+.editArticle_form_tags_loading {
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
