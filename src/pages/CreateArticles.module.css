@@ -1,0 +1,51 @@
+.createArticle_container {
+  width: 100%;
+  padding: 10px 24px;
+}
+
+.createArticle_header {
+  margin: 0px;
+  font-size: 40px;
+}
+
+.createArticle_form_container {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+}
+
+.createArticle_form_all_inputs_container {
+  width: 100%;
+}
+
+.createArticle_form_input_container {
+  position: relative;
+}
+
+.createArticle_form_input_error {
+  position: absolute;
+  bottom: -22px;
+  left: 5px;
+  color: #cb2e25;
+}
+
+.createArticle_form_input_submit_button {
+  background-color: #1c7cd5;
+  color: white;
+  padding: 4px 16px;
+}
+
+.createArticle_form_input_submit_button_loading {
+  padding: 2px 16px;
+}
+
+.createArticle_form_tags_container {
+  width: 250px;
+}
+
+.createArticle_form_tags_loading {
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

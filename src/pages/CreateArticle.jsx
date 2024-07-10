@@ -5,6 +5,7 @@ import createArticlesApi from "../service/createArticleService";
 import { useInput } from "../hooks";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import styles from "./CreateArticles.module.css";
 
 const titleValidation = (value) => {
   return value.trim() !== "";
@@ -109,22 +110,21 @@ const CreateArticle = () => {
   };
 
   return (
-    <div className="w-100" style={{ padding: "10px 24px" }}>
-      <p className="m-0" style={{ fontSize: "40px" }}>
-        Create Article
-      </p>
+    <div className={styles.createArticle_container}>
+      <p className={styles.createArticle_header}>Create Article</p>
 
-      <div className="w-100 d-flex flex-row">
-        <div className="w-100 mr-4">
+      <div className={styles.createArticle_form_container}>
+        <div className={styles.createArticle_form_all_inputs_container}>
           <form onSubmit={handleSubmit}>
-            <div className="form-group" style={{ position: "relative" }}>
+            <div
+              className={`form-group ${styles.createArticle_form_input_container}`}
+            >
               <label for="exampleInputEmail1">Title</label>
 
               <input
                 type="text"
                 className="form-control"
                 id="exampleInputEmail1"
-                aria-describedby="emailHelp"
                 placeholder="Title"
                 value={titleValue}
                 onChange={titleOnChangeHandler}
@@ -132,20 +132,15 @@ const CreateArticle = () => {
               />
 
               {titleError && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "-22px",
-                    left: "5px",
-                    color: "#cb2e25",
-                  }}
-                >
-                  Title shoud not be empty
+                <div className={styles.createArticle_form_input_error}>
+                  Title should not be empty
                 </div>
               )}
             </div>
 
-            <div className="form-group" style={{ position: "relative" }}>
+            <div
+              className={`form-group ${styles.createArticle_form_input_container}`}
+            >
               <label for="exampleInputPassword1">Description</label>
 
               <input
@@ -159,20 +154,15 @@ const CreateArticle = () => {
               />
 
               {descriptionError && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "-22px",
-                    left: "5px",
-                    color: "#cb2e25",
-                  }}
-                >
+                <div className={styles.createArticle_form_input_error}>
                   Description is not valid
                 </div>
               )}
             </div>
 
-            <div className="form-group" style={{ position: "relative" }}>
+            <div
+              className={`form-group ${styles.createArticle_form_input_container}`}
+            >
               <label for="exampleFormControlTextarea1">Body</label>
 
               <textarea
@@ -185,14 +175,7 @@ const CreateArticle = () => {
               />
 
               {bodyError && (
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "-22px",
-                    left: "5px",
-                    color: "#cb2e25",
-                  }}
-                >
+                <div className={styles.createArticle_form_input_error}>
                   Body should not be empty
                 </div>
               )}
@@ -200,7 +183,7 @@ const CreateArticle = () => {
 
             <button
               type="submit"
-              className="btn btn-primary px-4"
+              className={`btn ${styles.createArticle_form_input_submit_button}`}
               disabled={!formIsValid}
               onClick={() => {
                 setIsLoading({ ...isLoading, submitButton: false });
@@ -209,7 +192,11 @@ const CreateArticle = () => {
               {isLoading.submitButton ? (
                 "Submit"
               ) : (
-                <div className="px-2">
+                <div
+                  className={
+                    styles.createArticle_form_input_submit_button_loading
+                  }
+                >
                   <Loading size={"sm"} />
                 </div>
               )}
@@ -217,28 +204,20 @@ const CreateArticle = () => {
           </form>
         </div>
 
-        <div className="" style={{ width: "250px" }}>
+        <div className={styles.createArticle_form_tags_container}>
           <div className="form-group">
             <label for="exampleInputEmail1">Tags</label>
             <input
               type="text"
               className="form-control"
               id="exampleInputEmail1"
-              aria-describedby="emailHelp"
               placeholder="New Tag"
             />
           </div>
 
           <div className="border rounded px-2 py-4">
             {isLoading.tags ? (
-              <div
-                style={{
-                  height: "300px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <div className={styles.createArticle_form_tags_loading}>
                 <Loading />
               </div>
             ) : (
