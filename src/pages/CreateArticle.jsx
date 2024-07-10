@@ -70,16 +70,27 @@ const CreateArticle = () => {
   const tagsOnSelectHandler = (event) => {
     if (event.target.checked) {
       setSelectedTags((preState) => {
-        const temp = [...preState];
-        temp.push(event.target.value);
+        const newState = [...preState];
+        newState.push(event.target.value);
 
-        return temp;
+        return newState;
       });
     } else {
       setSelectedTags((preState) => {
-        const temp = [...preState];
+        const newState = [...preState];
 
-        return temp.filter((item) => item !== event.target.value);
+        return newState.filter((item) => item !== event.target.value);
+      });
+    }
+  };
+
+  const newTagOnChangeHandler = (event) => {
+    if (event.key === "Enter") {
+      setTags((preState) => {
+        const newState = [...preState];
+
+        newState.push(event.target.value);
+        return newState;
       });
     }
   };
@@ -99,7 +110,6 @@ const CreateArticle = () => {
     const response = await createArticlesApi(user, newArticle);
 
     if (response.status) {
-      debugger;
       navigate("/articles");
     } else {
       for (const key in response.data) {
@@ -212,6 +222,7 @@ const CreateArticle = () => {
               className="form-control"
               id="exampleInputEmail1"
               placeholder="New Tag"
+              onKeyDown={newTagOnChangeHandler}
             />
           </div>
 
